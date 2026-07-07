@@ -1,0 +1,18 @@
+<video style="text-align: center; display: block; margin: 0 auto;"
+  {{ if and (.Get "autoplay") (ne (.Get "autoplay") "false") }}autoplay{{ end }}
+  {{ if and (.Get "loop") (ne (.Get "loop") "false") }}loop{{ end }}
+  {{ if and (.Get "muted") (ne (.Get "muted") "false") }}muted{{ end }}
+  {{ if ne (.Get "controls") "false" }}controls{{ end }}
+  {{ with .Get "volume" }}onloadedmetadata="this.volume={{ . }}"{{ end }}
+>
+  {{ $filename := .Get "filename" }}
+  {{ $extension := strings.TrimPrefix "." (path.Ext $filename) | lower }}
+  {{ $video_type := default "video/mp4" (.Get "type") }}
+  {{ if eq $extension "mp4" }}
+    {{ $video_type = "video/mp4" }}
+  {{ else if eq $extension "webm" }}
+    {{ $video_type = "video/webm" }}
+  {{ end }}
+  <source src="{{ relURL "media/" }}{{ $filename }}" type="{{ $video_type }}" />
+  Your browser does not support the video tag.
+</video>
